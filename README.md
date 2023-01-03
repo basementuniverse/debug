@@ -93,3 +93,11 @@ Debug.marker('player', player.name, player.position, options);
 | `labelOffset` | `vec` | `{ x: 10, y: 10 }` | The offset of the label from the marker |
 | `foregroundColour` | `string` | `#fff` | The colour of the text |
 | `backgroundColour` | `string` | `#333` | The colour of the background |
+
+## Other components
+
+* [Camera](https://www.npmjs.com/package/@basementuniverse/camera)
+* [Content Manager](https://www.npmjs.com/package/@basementuniverse/content-manager)
+* [Debug](https://www.npmjs.com/package/@basementuniverse/debug)
+* [Input Manager](https://www.npmjs.com/package/@basementuniverse/input-manager)
+* [Scene Manager](https://www.npmjs.com/package/@basementuniverse/scene-manager)
