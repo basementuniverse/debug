@@ -1,6 +1,6 @@
 {
   "name": "@basementuniverse/debug",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A component for rendering debug output on a canvas",
   "main": "build/index.js",
   "types": "build/index.d.ts",
