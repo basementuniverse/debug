@@ -2,6 +2,8 @@
 
 A component for rendering debug output on a canvas.
 
+![Preview](preview.png "Preview")
+
 ## Installation
 
 ```bash
@@ -44,6 +46,16 @@ Show a marker somewhere on the screen:
 Debug.marker('player', player.name, player.position);
 ```
 
+Show a chart in a corner of the screen:
+```ts
+Debug.chart('actors', game.actors.length);
+```
+
+Show a border somewhere on the screen:
+```ts
+Debug.border('player', '', player.position, { size: player.size });
+```
+
 ## Options
 
 ```ts
@@ -57,45 +69,106 @@ Debug.initialise(options);
 | `padding` | `number` | `4` | Padding between debug text and background |
 | `font` | `string` | `10pt Lucida Console, monospace` | The font to use |
 | `lineHeight` | `number` | `12` | The height of a line of text |
+| `lineMargin` | `number` | `0` | The margin between lines of text |
 | `foregroundColour` | `string` | `#fff` | The colour of the text |
 | `backgroundColour` | `string` | `#333` | The colour of the background |
 | `defaultValue` | `DebugValue` | (see below) | Default options for values |
+| `defaultChart` | `DebugChart` | (see below) | Default options for charts |
 | `defaultMarker` | `DebugMarker` | (see below) | Default options for markers |
+| `defaultBorder` | `DebugBorder` | (see below) | Default options for borders |
 
 ### Value options
 
 ```ts
-const options = { ... };
-Debug.value('FPS', game.fps, options);
+type DebugValue = {
+  label?: string;
+  value?: number | string;
+  align: 'left' | 'right';
+  showLabel: boolean;
+  padding?: number;
+  font?: string;
+  foregroundColour?: string;
+  backgroundColour?: string;
+};
+
+Debug.value(label, value, options);
 ```
 
-| Option | Type | Default | Description |
-| --- | --- | --- | --- |
-| `align` | `'left' | 'right'` | `'left'` | Screen alignment |
-| `showLabel` | `boolean` | `true` | Show the label |
-| `padding` | `number` | `4` | Padding between debug text and background |
-| `font` | `string` | `10pt Lucida Console, monospace` | The font to use |
-| `foregroundColour` | `string` | `#fff` | The colour of the text |
-| `backgroundColour` | `string` | `#333` | The colour of the background |
+### Chart options
+
+```ts
+type DebugChart = {
+  label?: string;
+  values: number[];
+  valueBufferSize: number;
+  valueBufferStride: number;
+  minValue: number;
+  maxValue: number;
+  barWidth: number;
+  barColours?: {
+    offset: number;
+    colour: string;
+  }[];
+  align: 'left' | 'right';
+  showLabel: boolean;
+  padding?: number;
+  font?: string;
+  foregroundColour?: string;
+  backgroundColour?: string;
+  chartBackgroundColour?: string;
+};
+
+Debug.chart(label, value, options);
+```
 
 ### Marker options
 
 ```ts
-const options = { ... };
-Debug.marker('player', player.name, player.position, options);
+type DebugMarker = {
+  label?: string;
+  value?: number | string;
+  position?: vec;
+  showLabel: boolean;
+  showValue: boolean;
+  showMarker: boolean;
+  markerSize: number;
+  markerStyle: 'x' | '+' | '.';
+  markerColour: string;
+  space: 'world' | 'screen';
+  padding?: number;
+  font?: string;
+  labelOffset: vec;
+  foregroundColour?: string;
+  backgroundColour?: string;
+};
+
+Debug.marker(label, value, position, options);
 ```
 
-| Option | Type | Default | Description |
-| --- | --- | --- | --- |
-| `showLabel` | `boolean` | `true` | Show the label |
-| `showValue` | `boolean` | `true` | Show the value |
-| `showMarker` | `boolean` | `true` | Show a marker icon |
-| `markerSize` | `number` | `6` | The size of the marker icon in px |
-| `markerStyle` | `'x' | '+' | '.'` | `'x'` | The style of the marker icon |
-| `markerColour` | `string` | `#ccc` | The colour of the marker icon |
-| `space` | `'world' | 'screen'` | `'world'` | Position this marker in world or screen space |
-| `padding` | `number` | `4` | Padding between debug text and background |
-| `font` | `string` | `10pt Lucida Console, monospace` | The font to use |
-| `labelOffset` | `vec` | `{ x: 10, y: 10 }` | The offset of the label from the marker |
-| `foregroundColour` | `string` | `#fff` | The colour of the text |
-| `backgroundColour` | `string` | `#333` | The colour of the background |
+### Border options
+
+```ts
+type DebugBorder = {
+  label?: string;
+  value?: number | string;
+  position?: vec;
+  size?: vec;
+  radius?: number;
+  showLabel: boolean;
+  showValue: boolean;
+  showBorder: boolean;
+  borderWidth: number;
+  borderStyle: 'solid' | 'dashed' | 'dotted';
+  borderShape: 'rectangle' | 'circle';
+  borderColour: string;
+  borderDashSize: number;
+  space: 'world' | 'screen';
+  padding?: number;
+  font?: string;
+  labelOffset: vec;
+  foregroundColour?: string;
+  backgroundColour?: string;
+};
+
+Debug.border(label, value, position, options);
+```
