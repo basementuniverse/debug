@@ -66,6 +66,7 @@ export type DebugValue = {
   font?: string;
   foregroundColour?: string;
   backgroundColour?: string;
+  level?: number;
 };
 
 export type DebugChart = {
@@ -87,6 +88,7 @@ export type DebugChart = {
   foregroundColour?: string;
   backgroundColour?: string;
   chartBackgroundColour?: string;
+  level?: number;
 };
 
 export type DebugMarker = {
@@ -105,6 +107,7 @@ export type DebugMarker = {
   labelOffset: vec;
   foregroundColour?: string;
   backgroundColour?: string;
+  level?: number
 };
 
 export type DebugBorder = {
@@ -127,6 +130,7 @@ export type DebugBorder = {
   labelOffset: vec;
   foregroundColour?: string;
   backgroundColour?: string;
+  level?: number;
 };
 
 export default class Debug {
@@ -357,17 +361,25 @@ export default class Debug {
   /**
    * Render the debug values and markers onto a canvas
    */
-  public static draw(context: CanvasRenderingContext2D) {
+  public static draw(context: CanvasRenderingContext2D, level: number = 0) {
     const instance = Debug.getInstance();
 
     // Draw world-space markers & borders
     context.save();
     instance.markers.forEach(marker => {
+      if (marker.level !== undefined && marker.level < level) {
+        return;
+      }
+
       if (marker.space === 'world') {
         instance.drawMarker(context, marker);
       }
     });
     instance.borders.forEach(border => {
+      if (border.level !== undefined && border.level < level) {
+        return;
+      }
+
       if (border.space === 'world') {
         instance.drawBorder(context, border);
       }
@@ -388,6 +400,10 @@ export default class Debug {
     );
 
     instance.values.forEach(value => {
+      if (value.level !== undefined && value.level < level) {
+        return;
+      }
+
       switch (value.align) {
         case 'left':
           position = vec(instance.options.margin, leftY);
@@ -420,6 +436,10 @@ export default class Debug {
     });
 
     instance.charts.forEach(chart => {
+      if (chart.level !== undefined && chart.level < level) {
+        return;
+      }
+
       switch (chart.align) {
         case 'left':
           position = vec(instance.options.margin, leftY);
@@ -460,12 +480,20 @@ export default class Debug {
     });
 
     instance.markers.forEach(marker => {
+      if (marker.level !== undefined && marker.level < level) {
+        return;
+      }
+
       if (marker.space === 'screen') {
         instance.drawMarker(context, marker);
       }
     });
 
     instance.borders.forEach(border => {
+      if (border.level !== undefined && border.level < level) {
+        return;
+      }
+
       if (border.space === 'screen') {
         instance.drawBorder(context, border);
       }

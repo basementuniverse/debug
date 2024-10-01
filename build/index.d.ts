@@ -54,6 +54,7 @@ export type DebugValue = {
     font?: string;
     foregroundColour?: string;
     backgroundColour?: string;
+    level?: number;
 };
 export type DebugChart = {
     label?: string;
@@ -74,6 +75,7 @@ export type DebugChart = {
     foregroundColour?: string;
     backgroundColour?: string;
     chartBackgroundColour?: string;
+    level?: number;
 };
 export type DebugMarker = {
     label?: string;
@@ -91,6 +93,7 @@ export type DebugMarker = {
     labelOffset: vec;
     foregroundColour?: string;
     backgroundColour?: string;
+    level?: number;
 };
 export type DebugBorder = {
     label?: string;
@@ -112,6 +115,7 @@ export type DebugBorder = {
     labelOffset: vec;
     foregroundColour?: string;
     backgroundColour?: string;
+    level?: number;
 };
 export default class Debug {
     private static instance;
@@ -150,7 +154,7 @@ export default class Debug {
     /**
      * Render the debug values and markers onto a canvas
      */
-    static draw(context: CanvasRenderingContext2D): void;
+    static draw(context: CanvasRenderingContext2D, level?: number): void;
     private static prepareLabel;
     private drawLabel;
     private drawChart;
