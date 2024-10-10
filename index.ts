@@ -100,6 +100,7 @@ export type DebugMarker = {
   showMarker: boolean;
   markerSize: number;
   markerStyle: 'x' | '+' | '.';
+  markerImage?: HTMLImageElement | HTMLCanvasElement;
   markerColour: string;
   space: 'world' | 'screen';
   padding?: number;
@@ -698,18 +699,26 @@ export default class Debug {
       );
     }
     if (marker.showMarker) {
-      context.lineWidth = 2;
-      context.strokeStyle = context.fillStyle = marker.markerColour;
-      switch (marker.markerStyle) {
-        case 'x':
-          this.drawCross(context, position, marker.markerSize);
-          break;
-        case '+':
-          this.drawPlus(context, position, marker.markerSize);
-          break;
-        case '.':
-          this.drawDot(context, position, marker.markerSize);
-          break;
+      if (marker.markerImage) {
+        context.drawImage(
+          marker.markerImage,
+          position.x - marker.markerImage.width / 2,
+          position.y - marker.markerImage.height / 2
+        );
+      } else {
+        context.lineWidth = 2;
+        context.strokeStyle = context.fillStyle = marker.markerColour;
+        switch (marker.markerStyle) {
+          case 'x':
+            this.drawCross(context, position, marker.markerSize);
+            break;
+          case '+':
+            this.drawPlus(context, position, marker.markerSize);
+            break;
+          case '.':
+            this.drawDot(context, position, marker.markerSize);
+            break;
+        }
       }
     }
     context.restore();

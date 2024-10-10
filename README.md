@@ -136,6 +136,7 @@ type DebugMarker = {
   markerSize: number;
   markerStyle: 'x' | '+' | '.';
   markerColour: string;
+  markerImage?: HTMLImageElement | HTMLCanvasElement;
   space: 'world' | 'screen';
   padding?: number;
   font?: string;
