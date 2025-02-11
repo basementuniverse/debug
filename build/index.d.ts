@@ -85,6 +85,7 @@ export type DebugMarker = {
     showValue: boolean;
     showMarker: boolean;
     markerSize: number;
+    markerLineWidth: number;
     markerStyle: 'x' | '+' | '.';
     markerImage?: HTMLImageElement | HTMLCanvasElement;
     markerColour: string;

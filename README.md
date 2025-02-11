@@ -134,6 +134,7 @@ type DebugMarker = {
   showValue: boolean;
   showMarker: boolean;
   markerSize: number;
+  markerLineWidth: number;
   markerStyle: 'x' | '+' | '.';
   markerColour: string;
   markerImage?: HTMLImageElement | HTMLCanvasElement;

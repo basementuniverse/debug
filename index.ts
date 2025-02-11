@@ -99,6 +99,7 @@ export type DebugMarker = {
   showValue: boolean;
   showMarker: boolean;
   markerSize: number;
+  markerLineWidth: number;
   markerStyle: 'x' | '+' | '.';
   markerImage?: HTMLImageElement | HTMLCanvasElement;
   markerColour: string;
@@ -165,6 +166,7 @@ export default class Debug {
       showValue: true,
       showMarker: true,
       markerSize: 6,
+      markerLineWidth: 2,
       markerStyle: 'x',
       markerColour: '#ccc',
       space: 'world',
@@ -706,7 +708,7 @@ export default class Debug {
           position.y - marker.markerImage.height / 2
         );
       } else {
-        context.lineWidth = 2;
+        context.lineWidth = marker.markerLineWidth;
         context.strokeStyle = context.fillStyle = marker.markerColour;
         switch (marker.markerStyle) {
           case 'x':
