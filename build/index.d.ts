@@ -156,7 +156,8 @@ export default class Debug {
     /**
      * Render the debug values and markers onto a canvas
      */
-    static draw(context: CanvasRenderingContext2D, tags?: string[]): void;
+    static draw(context: CanvasRenderingContext2D, tags?: string[], clear?: boolean): void;
+    static clear(clearCharts?: boolean): void;
     private static prepareLabel;
     private drawLabel;
     private drawChart;

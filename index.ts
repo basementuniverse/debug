@@ -364,7 +364,11 @@ export default class Debug {
   /**
    * Render the debug values and markers onto a canvas
    */
-  public static draw(context: CanvasRenderingContext2D, tags?: string[]) {
+  public static draw(
+    context: CanvasRenderingContext2D,
+    tags?: string[],
+    clear = true
+  ) {
     const instance = Debug.getInstance();
 
     // Draw world-space markers & borders
@@ -505,8 +509,20 @@ export default class Debug {
     context.restore();
 
     // Clear values, markers & borders ready for next frame
+    if (clear) {
+      instance.values.clear();
+      instance.markers.clear();
+      instance.borders.clear();
+    }
+  }
+
+  public static clear(clearCharts = false) {
+    const instance = Debug.getInstance();
     instance.values.clear();
     instance.markers.clear();
+    if (clearCharts) {
+      instance.charts.clear();
+    }
     instance.borders.clear();
   }
 

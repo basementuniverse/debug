@@ -187,4 +187,28 @@ When rendering debug output, you can optionally specify a list of tags:
 Debug.draw(context, ['tag1', 'tag2']);
 ```
 
-Only values/markers/borders etc. which contain at least one of these tags will be rendered.
+Only values/markers/borders etc. which contain at least one of these tags will be rendered. This might be useful if you want to control the "level" of debug output, e.g. info/warning/error etc.
+
+### Clearing debug output (and auto-clearing)
+
+By default, every time we render debug output (using `Debug.draw(context)`), the list of values/markers/borders etc. is cleared ready for the next frame. This prevents the list from growing indefinitely.
+
+However, there might be cases where you want to call `Debug.draw(context)` multiple times in a single frame (especially if using tags to render different values on different canvases), in which case you might not want the list to be cleared automatically.
+
+You can disable auto-clearing by passing `false` as the third arguement to `Debug.draw`:
+
+```ts
+Debug.draw(context, [], false);
+```
+
+In this case, you will need to manually clear the list of values/markers/borders etc. using `Debug.clear()` before the next frame.
+
+_Note that charts shouldn't usually be cleared, as they need to keep their history of values._
+
+```ts
+// Clear all values, markers, and borders
+Debug.clear();
+
+// Clear everything (including charts)
+Debug.clear(true);
+```
