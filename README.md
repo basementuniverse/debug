@@ -89,7 +89,7 @@ type DebugValue = {
   font?: string;
   foregroundColour?: string;
   backgroundColour?: string;
-  level?: number;
+  tags?: string[];
 };
 
 Debug.value(label, value, options);
@@ -117,7 +117,7 @@ type DebugChart = {
   foregroundColour?: string;
   backgroundColour?: string;
   chartBackgroundColour?: string;
-  level?: number;
+  tags?: string[];
 };
 
 Debug.chart(label, value, options);
@@ -144,7 +144,7 @@ type DebugMarker = {
   labelOffset: vec;
   foregroundColour?: string;
   backgroundColour?: string;
-  level?: number;
+  tags?: string[];
 };
 
 Debug.marker(label, value, position, options);
@@ -173,18 +173,18 @@ type DebugBorder = {
   labelOffset: vec;
   foregroundColour?: string;
   backgroundColour?: string;
-  level?: number;
+  tags?: string[];
 };
 
 Debug.border(label, value, position, options);
 ```
 
-### Levels
+### Tags
 
-When rendering debug output, you can optionally specify a level:
+When rendering debug output, you can optionally specify a list of tags:
 
 ```ts
-Debug.draw(context, level);
+Debug.draw(context, ['tag1', 'tag2']);
 ```
 
-Only values/markers/borders etc. with a level _at least as high_ as the specified level will be rendered. Any debug items without a level will be rendered regardless of the level.
+Only values/markers/borders etc. which contain at least one of these tags will be rendered.
