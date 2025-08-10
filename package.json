@@ -2,16 +2,19 @@
   "name": "@basementuniverse/debug",
   "version": "1.4.0",
   "description": "A component for rendering debug output on a canvas",
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
-  "scripts": {
-    "build": "webpack"
-  },
   "author": "Gordon Larrigan <gordonlarrigan@gmail.com> (https://gordonlarrigan.com)",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/basementuniverse/debug.git"
+  },
+  "files": [
+    "build"
+  ],
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "build": "webpack"
   },
   "dependencies": {
     "@basementuniverse/vec": "^2.3.5"
