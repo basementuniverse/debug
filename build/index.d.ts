@@ -1,4 +1,4 @@
-import { vec } from '@basementuniverse/vec';
+import { vec2 } from '@basementuniverse/vec';
 export type DebugOptions = {
     /**
      * Edge of screen margin
@@ -80,7 +80,7 @@ export type DebugChart = {
 export type DebugMarker = {
     label?: string;
     value?: number | string;
-    position?: vec;
+    position?: vec2;
     showLabel: boolean;
     showValue: boolean;
     showMarker: boolean;
@@ -92,7 +92,7 @@ export type DebugMarker = {
     space: 'world' | 'screen';
     padding?: number;
     font?: string;
-    labelOffset: vec;
+    labelOffset: vec2;
     foregroundColour?: string;
     backgroundColour?: string;
     tags?: string[];
@@ -100,8 +100,8 @@ export type DebugMarker = {
 export type DebugBorder = {
     label?: string;
     value?: number | string;
-    position?: vec;
-    size?: vec;
+    position?: vec2;
+    size?: vec2;
     radius?: number;
     showLabel: boolean;
     showValue: boolean;
@@ -114,14 +114,14 @@ export type DebugBorder = {
     space: 'world' | 'screen';
     padding?: number;
     font?: string;
-    labelOffset: vec;
+    labelOffset: vec2;
     foregroundColour?: string;
     backgroundColour?: string;
     tags?: string[];
 };
 export default class Debug {
     private static instance;
-    private static readonly defaultOptions;
+    private static readonly DEFAULT_OPTIONS;
     private options;
     private values;
     private charts;
@@ -148,11 +148,11 @@ export default class Debug {
     /**
      * Show a marker in world or screen space
      */
-    static marker(label: string, value: string | number, position: vec, options?: Partial<DebugMarker>): void;
+    static marker(label: string, value: string | number, position: vec2, options?: Partial<DebugMarker>): void;
     /**
      * Show a border in world or screen space
      */
-    static border(label: string, value: string | number, position: vec, options?: Partial<DebugBorder>): void;
+    static border(label: string, value: string | number, position: vec2, options?: Partial<DebugBorder>): void;
     /**
      * Render the debug values and markers onto a canvas
      */

@@ -1,4 +1,4 @@
-import { vec } from '@basementuniverse/vec';
+import { vec2 } from '@basementuniverse/vec';
 
 export type DebugOptions = {
   /**
@@ -94,7 +94,7 @@ export type DebugChart = {
 export type DebugMarker = {
   label?: string;
   value?: number | string;
-  position?: vec;
+  position?: vec2;
   showLabel: boolean;
   showValue: boolean;
   showMarker: boolean;
@@ -106,7 +106,7 @@ export type DebugMarker = {
   space: 'world' | 'screen';
   padding?: number;
   font?: string;
-  labelOffset: vec;
+  labelOffset: vec2;
   foregroundColour?: string;
   backgroundColour?: string;
   tags?: string[];
@@ -115,8 +115,8 @@ export type DebugMarker = {
 export type DebugBorder = {
   label?: string;
   value?: number | string;
-  position?: vec;
-  size?: vec;
+  position?: vec2;
+  size?: vec2;
   radius?: number;
   showLabel: boolean;
   showValue: boolean;
@@ -129,7 +129,7 @@ export type DebugBorder = {
   space: 'world' | 'screen';
   padding?: number;
   font?: string;
-  labelOffset: vec;
+  labelOffset: vec2;
   foregroundColour?: string;
   backgroundColour?: string;
   tags?: string[];
@@ -137,8 +137,7 @@ export type DebugBorder = {
 
 export default class Debug {
   private static instance: Debug;
-
-  private static readonly defaultOptions: DebugOptions = {
+  private static readonly DEFAULT_OPTIONS: DebugOptions = {
     margin: 10,
     padding: 4,
     font: '10pt Lucida Console, monospace',
@@ -170,7 +169,7 @@ export default class Debug {
       markerStyle: 'x',
       markerColour: '#ccc',
       space: 'world',
-      labelOffset: vec(10),
+      labelOffset: vec2(10),
     },
     defaultBorder: {
       showLabel: true,
@@ -182,54 +181,46 @@ export default class Debug {
       borderColour: '#ccc',
       borderDashSize: 5,
       space: 'world',
-      labelOffset: vec(10),
+      labelOffset: vec2(10),
     },
   };
 
   private options: DebugOptions;
-
   private values: Map<string, DebugValue>;
-
   private charts: Map<string, DebugChart>;
-
   private markers: Map<string, DebugMarker>;
-
   private borders: Map<string, DebugBorder>;
 
   private constructor(options?: Partial<DebugOptions>) {
     if (options?.defaultValue) {
       options.defaultValue = Object.assign(
         {},
-        Debug.defaultOptions.defaultValue,
+        Debug.DEFAULT_OPTIONS.defaultValue,
         options.defaultValue
       );
     }
     if (options?.defaultChart) {
       options.defaultChart = Object.assign(
         {},
-        Debug.defaultOptions.defaultChart,
+        Debug.DEFAULT_OPTIONS.defaultChart,
         options.defaultChart
       );
     }
     if (options?.defaultMarker) {
       options.defaultMarker = Object.assign(
         {},
-        Debug.defaultOptions.defaultMarker,
+        Debug.DEFAULT_OPTIONS.defaultMarker,
         options.defaultMarker
       );
     }
     if (options?.defaultBorder) {
       options.defaultBorder = Object.assign(
         {},
-        Debug.defaultOptions.defaultBorder,
+        Debug.DEFAULT_OPTIONS.defaultBorder,
         options.defaultBorder
       );
     }
-    this.options = Object.assign(
-      {},
-      Debug.defaultOptions,
-      options ?? {}
-    );
+    this.options = Object.assign({}, Debug.DEFAULT_OPTIONS, options ?? {});
     this.values = new Map<string, DebugValue>();
     this.charts = new Map<string, DebugChart>();
     this.markers = new Map<string, DebugMarker>();
@@ -264,13 +255,16 @@ export default class Debug {
   ) {
     const instance = Debug.getInstance();
 
-    instance.values.set(label, Object.assign(
-      {},
-      instance.options.defaultValue,
-      instance.values.get(label) ?? {},
-      options ?? {},
-      { label, value }
-    ));
+    instance.values.set(
+      label,
+      Object.assign(
+        {},
+        instance.options.defaultValue,
+        instance.values.get(label) ?? {},
+        options ?? {},
+        { label, value }
+      )
+    );
   }
 
   /**
@@ -284,21 +278,24 @@ export default class Debug {
     const instance = Debug.getInstance();
     const currentChart = instance.charts.get(label);
 
-    instance.charts.set(label, Object.assign(
-      {},
-      instance.options.defaultChart,
-      currentChart ?? {},
-      options ?? {},
-      {
-        label,
-        values: [...currentChart?.values ?? [], value].slice(
-          -(
-            options?.valueBufferSize ??
-            instance.options.defaultChart.valueBufferSize
-          )
-        ),
-      }
-    ));
+    instance.charts.set(
+      label,
+      Object.assign(
+        {},
+        instance.options.defaultChart,
+        currentChart ?? {},
+        options ?? {},
+        {
+          label,
+          values: [...(currentChart?.values ?? []), value].slice(
+            -(
+              options?.valueBufferSize ??
+              instance.options.defaultChart.valueBufferSize
+            )
+          ),
+        }
+      )
+    );
   }
 
   /**
@@ -316,18 +313,21 @@ export default class Debug {
   public static marker(
     label: string,
     value: string | number,
-    position: vec,
+    position: vec2,
     options?: Partial<DebugMarker>
   ) {
     const instance = Debug.getInstance();
 
-    instance.markers.set(label, Object.assign(
-      {},
-      instance.options.defaultMarker,
-      instance.markers.get(label) ?? {},
-      options ?? {},
-      { label, value, position }
-    ));
+    instance.markers.set(
+      label,
+      Object.assign(
+        {},
+        instance.options.defaultMarker,
+        instance.markers.get(label) ?? {},
+        options ?? {},
+        { label, value, position }
+      )
+    );
   }
 
   /**
@@ -336,7 +336,7 @@ export default class Debug {
   public static border(
     label: string,
     value: string | number,
-    position: vec,
+    position: vec2,
     options?: Partial<DebugBorder>
   ) {
     if (options?.borderShape === 'circle' && options?.radius === undefined) {
@@ -352,13 +352,16 @@ export default class Debug {
 
     const instance = Debug.getInstance();
 
-    instance.borders.set(label, Object.assign(
-      {},
-      instance.options.defaultBorder,
-      instance.borders.get(label) ?? {},
-      options ?? {},
-      { label, value, position }
-    ));
+    instance.borders.set(
+      label,
+      Object.assign(
+        {},
+        instance.options.defaultBorder,
+        instance.borders.get(label) ?? {},
+        options ?? {},
+        { label, value, position }
+      )
+    );
   }
 
   /**
@@ -397,14 +400,12 @@ export default class Debug {
     context.save();
     context.setTransform(1, 0, 0, 1, 0, 0);
 
-    let position: vec;
+    let position: vec2;
     let leftY = instance.options.margin;
     let rightY = instance.options.margin;
 
-    const lineHeight = (
-      instance.options.lineHeight +
-      instance.options.padding * 2
-    );
+    const lineHeight =
+      instance.options.lineHeight + instance.options.padding * 2;
 
     instance.values.forEach(value => {
       if (tags && !value.tags?.some(tag => tags.includes(tag))) {
@@ -413,11 +414,11 @@ export default class Debug {
 
       switch (value.align) {
         case 'left':
-          position = vec(instance.options.margin, leftY);
+          position = vec2(instance.options.margin, leftY);
           leftY += lineHeight + instance.options.lineMargin;
           break;
         case 'right':
-          position = vec(
+          position = vec2(
             context.canvas.clientWidth - instance.options.margin,
             rightY
           );
@@ -449,11 +450,11 @@ export default class Debug {
 
       switch (chart.align) {
         case 'left':
-          position = vec(instance.options.margin, leftY);
+          position = vec2(instance.options.margin, leftY);
           leftY += lineHeight + instance.options.lineMargin;
           break;
         case 'right':
-          position = vec(
+          position = vec2(
             context.canvas.clientWidth - instance.options.margin,
             rightY
           );
@@ -463,12 +464,7 @@ export default class Debug {
 
       instance.drawChart(
         context,
-        Debug.prepareLabel(
-          chart.label ?? '',
-          '',
-          chart.showLabel,
-          false
-        ),
+        Debug.prepareLabel(chart.label ?? '', '', chart.showLabel, false),
         position,
         chart.align,
         chart.padding ?? instance.options.padding,
@@ -532,9 +528,9 @@ export default class Debug {
     showLabel: boolean,
     showValue?: boolean
   ) {
-    const actualLabel = (showLabel && label) ? label : '';
-    const actualValue = (!!showValue && value !== '') ? value.toString() : '';
-    const separator = (actualLabel && actualValue) ? ': ' : '';
+    const actualLabel = showLabel && label ? label : '';
+    const actualValue = !!showValue && value !== '' ? value.toString() : '';
+    const separator = actualLabel && actualValue ? ': ' : '';
 
     return `${actualLabel}${separator}${actualValue}`;
   }
@@ -542,7 +538,7 @@ export default class Debug {
   private drawLabel(
     context: CanvasRenderingContext2D,
     text: string,
-    position: vec,
+    position: vec2,
     align: 'left' | 'right',
     padding: number,
     font: string,
@@ -556,9 +552,8 @@ export default class Debug {
       width: context.measureText(text).width + padding * 2,
       height: this.options.lineHeight + padding * 2,
     };
-    const x = align === 'right'
-      ? (position.x - backgroundSize.width)
-      : position.x;
+    const x =
+      align === 'right' ? position.x - backgroundSize.width : position.x;
 
     // Draw background
     context.fillStyle = backgroundColour;
@@ -578,7 +573,7 @@ export default class Debug {
   private drawChart(
     context: CanvasRenderingContext2D,
     label: string,
-    position: vec,
+    position: vec2,
     align: 'left' | 'right',
     padding: number,
     font: string,
@@ -591,19 +586,20 @@ export default class Debug {
     minValue: number,
     maxValue: number,
     barWidth: number,
-    barColours: {
-      offset: number;
-      colour: string;
-    }[] | undefined
+    barColours:
+      | {
+          offset: number;
+          colour: string;
+        }[]
+      | undefined
   ) {
     context.save();
     context.font = font;
     context.textBaseline = 'top';
 
     const chartSize = {
-      width: barWidth * Math.ceil(
-        valueBufferSize / Math.max(valueBufferStride, 1)
-      ),
+      width:
+        barWidth * Math.ceil(valueBufferSize / Math.max(valueBufferStride, 1)),
       height: this.options.lineHeight + padding * 2,
     };
     const labelSize = {
@@ -611,16 +607,11 @@ export default class Debug {
       height: this.options.lineHeight,
     };
     const backgroundSize = {
-      width: (
-        labelSize.width +
-        padding +
-        chartSize.width
-      ) + padding * 2,
+      width: labelSize.width + padding + chartSize.width + padding * 2,
       height: this.options.lineHeight + padding * 2,
     };
-    const x = align === 'right'
-      ? (position.x - backgroundSize.width)
-      : position.x;
+    const x =
+      align === 'right' ? position.x - backgroundSize.width : position.x;
 
     // Draw background
     context.fillStyle = backgroundColour;
@@ -649,7 +640,7 @@ export default class Debug {
     }
 
     const range = maxValue - minValue;
-    const barOffset = vec(
+    const barOffset = vec2(
       x + padding + labelSize.width + padding,
       position.y - padding
     );
@@ -662,33 +653,31 @@ export default class Debug {
       if (valueBufferStride <= 1) {
         value = values[i];
       } else {
-        value = values
-          .slice(i * valueBufferStride, (i + 1) * valueBufferStride)
-          .reduce((a, b) => a + b, 0) / valueBufferStride;
+        value =
+          values
+            .slice(i * valueBufferStride, (i + 1) * valueBufferStride)
+            .reduce((a, b) => a + b, 0) / valueBufferStride;
       }
 
-      const barSize = vec(
+      const barSize = vec2(
         barWidth,
-        Math.round(chartSize.height * (value - minValue) / range)
+        Math.round((chartSize.height * (value - minValue)) / range)
       );
-      const barPosition = vec.add(
+      const barPosition = vec2.add(
         barOffset,
-        vec(
-          (
-            values.length < valueBufferSize
-              ? Math.ceil(
-                  (valueBufferSize - values.length) / valueBufferStride
-                ) * barWidth
-              : 0
-          ) + i * barWidth,
+        vec2(
+          (values.length < valueBufferSize
+            ? Math.ceil((valueBufferSize - values.length) / valueBufferStride) *
+              barWidth
+            : 0) +
+            i * barWidth,
           chartSize.height - barSize.y
         )
       );
-      const barColour = (
-        barColours
+      const barColour =
+        (barColours
           ? [...barColours].reverse().find(c => values[i] >= c.offset)?.colour
-          : undefined
-      ) ?? foregroundColour;
+          : undefined) ?? foregroundColour;
       context.fillStyle = barColour;
       context.fillRect(barPosition.x, barPosition.y, barSize.x, barSize.y);
     }
@@ -698,7 +687,7 @@ export default class Debug {
 
   private drawMarker(context: CanvasRenderingContext2D, marker: DebugMarker) {
     context.save();
-    const position = marker.position ?? vec();
+    const position = marker.position ?? vec2();
     if (marker.showLabel || marker.showValue) {
       this.drawLabel(
         context,
@@ -708,7 +697,7 @@ export default class Debug {
           marker.showLabel,
           marker.showValue
         ),
-        vec.add(position ?? vec(), marker.labelOffset),
+        vec2.add(position ?? vec2(), marker.labelOffset),
         'left',
         marker.padding ?? this.options.padding,
         marker.font ?? this.options.font,
@@ -744,7 +733,7 @@ export default class Debug {
 
   private drawCross(
     context: CanvasRenderingContext2D,
-    position: vec,
+    position: vec2,
     size: number
   ) {
     context.beginPath();
@@ -758,7 +747,7 @@ export default class Debug {
 
   private drawPlus(
     context: CanvasRenderingContext2D,
-    position: vec,
+    position: vec2,
     size: number
   ) {
     context.beginPath();
@@ -772,7 +761,7 @@ export default class Debug {
 
   private drawDot(
     context: CanvasRenderingContext2D,
-    position: vec,
+    position: vec2,
     size: number
   ) {
     context.beginPath();
@@ -780,12 +769,9 @@ export default class Debug {
     context.fill();
   }
 
-  private drawBorder(
-    context: CanvasRenderingContext2D,
-    border: DebugBorder
-  ) {
+  private drawBorder(context: CanvasRenderingContext2D, border: DebugBorder) {
     context.save();
-    const position = border.position ?? vec();
+    const position = border.position ?? vec2();
     if (border.showLabel || border.showValue) {
       this.drawLabel(
         context,
@@ -795,7 +781,7 @@ export default class Debug {
           border.showLabel,
           border.showValue
         ),
-        vec.add(position ?? vec(), border.labelOffset),
+        vec2.add(position ?? vec2(), border.labelOffset),
         'left',
         border.padding ?? this.options.padding,
         border.font ?? this.options.font,
@@ -835,8 +821,8 @@ export default class Debug {
 
   private drawRectangle(
     context: CanvasRenderingContext2D,
-    position: vec,
-    size: vec
+    position: vec2,
+    size: vec2
   ) {
     context.beginPath();
     context.rect(position.x, position.y, size.x, size.y);
@@ -845,7 +831,7 @@ export default class Debug {
 
   private drawCircle(
     context: CanvasRenderingContext2D,
-    position: vec,
+    position: vec2,
     radius: number
   ) {
     context.beginPath();
