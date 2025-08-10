@@ -1,6 +1,6 @@
 {
   "name": "@basementuniverse/debug",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "A component for rendering debug output on a canvas",
   "author": "Gordon Larrigan <gordonlarrigan@gmail.com> (https://gordonlarrigan.com)",
   "license": "MIT",
